@@ -29,14 +29,17 @@ import org.springframework.web.bind.annotation.RestController;
  * - PATCH /api/links/{id} - Atualiza parcialmente um link
  * - DELETE /api/links/{id} - Remove um link
  */
-@RestController
-@RequestMapping("/api/links")
+@RestController // anotação que indica que esta classe é um controlador REST
+@RequestMapping("/api/links") // anotação que define o caminho base para os endpoints deste controlador
 public class LinksController {
-    private static final String TITULO_GLOBAL = "Título Atualizado";
+    private static final String TITULO_GLOBAL = "Título Atualizado"; // Título usado nos testes
 
     // "Banco de dados" simulado
+    // map é uma estrutura de dados que armazena pares chave-valor
+    // aqui usamos Integer como chave (ID do link) e Map<String, String> como valor (dados do link) que seriam título e URL
+    // hashmap é uma implementação concreta de map que usa uma tabela hash para armazenar os dados
     private final Map<Integer, Map<String, String>> linksDB = new HashMap<>();
-    private int nextId = 1;
+    private int nextId = 1; 
 
     public LinksController() {
         // Dados iniciais
@@ -47,24 +50,34 @@ public class LinksController {
 
     // GET - Listar todos os links
     @GetMapping
+    // cada elemento da lista é um mapa que representa um link com seus atributos de id, título e url
     public List<Map<String, String>> getLinks() {
+        // cria e devolve uma nova lista contendo todos os valores (links) do mapa linksDB
         return new ArrayList<>(linksDB.values());
     }
 
     // GET - Buscar link por ID
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") 
+    // o link é representado como um mapa de strings, onde as chaves são os nomes dos atributos (id, título, url)
+    // @pathvariable indica que o valor do parâmetro id virá da URL da requisição
     public Map<String, String> getLinkById(@PathVariable int id) {
+        // retorna o link correspondente ao ID fornecido, ou null se não existir
         return linksDB.get(id);
     }
 
     // POST - Criar novo link
     @PostMapping
+    // Map<String, String> é o que sera retornado, nesse caso um mapa representando o novo link criado
+    // @requestbody indica que os dados do novo link virão do corpo da requisição HTTP
     public Map<String, String> createLink(@RequestBody Map<String, String> data) {
+        // cria um novo mapa para o link 
         Map<String, String> novoLink = new HashMap<>();
+        // pegando os atributos do link a partir do corpo da requisição
         novoLink.put("id", String.valueOf(nextId));
         novoLink.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
         novoLink.put("url", data.get("url"));
 
+        // adiciona o novo link ao "banco de dados"
         linksDB.put(nextId, novoLink);
         nextId++;
 
@@ -74,11 +87,14 @@ public class LinksController {
     // PUT - Atualizar link completo
     @PutMapping("/{id}")
     public Map<String, String> updateLink(@PathVariable int id, @RequestBody Map<String, String> data) {
+        // cria um novo mapa para o link atualizado
         Map<String, String> linkAtualizado = new HashMap<>();
+        // atualiza todos os atributos do link com os novos valores fornecidos no corpo da requisição
         linkAtualizado.put("id", String.valueOf(id));
         linkAtualizado.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
         linkAtualizado.put("url", data.get("url"));
 
+        // substitui o link existente no "banco de dados" pelo link atualizado
         linksDB.put(id, linkAtualizado);
         return linkAtualizado;
     }
@@ -86,12 +102,15 @@ public class LinksController {
     // PATCH - Atualizar parcialmente
     @PatchMapping("/{id}")
     public Map<String, String> patchLink(@PathVariable int id, @RequestBody Map<String, String> data) {
+        // obtém o link existente 
         Map<String, String> linkExistente = linksDB.get(id);
+        // se o link existir, atualiza apenas os campos fornecidos no corpo da requisição
         if (linkExistente != null) {
             Map<String, String> linkAtualizado = new HashMap<>(linkExistente);
             if (data.get(TITULO_GLOBAL) != null) linkAtualizado.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
             if (data.get("url") != null) linkAtualizado.put("url", data.get("url"));
 
+            // salva o link atualizado no "banco de dados"
             linksDB.put(id, linkAtualizado);
             return linkAtualizado;
         }
@@ -101,6 +120,7 @@ public class LinksController {
     // DELETE - Remover link
     @DeleteMapping("/{id}")
     public String deleteLink(@PathVariable int id) {
+        // remove o link do "banco de dados"
         linksDB.remove(id);
         return "Link " + id + " removido";
     }

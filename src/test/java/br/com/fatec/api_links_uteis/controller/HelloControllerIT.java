@@ -15,18 +15,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * usando @WebMvcTest para testar apenas a camada web do Spring,
  * simulando requisições HTTP com MockMvc.
  */
-@WebMvcTest(HelloController.class)
+@WebMvcTest(HelloController.class) // anotação que configura o teste para o controller específico 
 class HelloControllerIT {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired // anotação que injeta a dependência do MockMvc
+    private MockMvc mockMvc; // instância do MockMvc para simular requisições HTTP
 
-    // Teste do endpoint hello - mais simples
-    @Test
+    @Test // anotação que indica que este método é um caso de teste
     void deveRetornarMensagemHelloQuandoGetHelloEndpoint() throws Exception {
-        mockMvc.perform(get("/api/hello"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Olá Fatec"));
+        mockMvc.perform(get("/api/hello")) // simula uma requisição GET para o endpoint /api/hello
+                .andExpect(status().isOk()) // verifica se o status da resposta é 200 OK
+                .andExpect(content().string("Olá Fatec")); // verifica se o conteúdo da resposta é "Olá Fatec"
     }
 
 }

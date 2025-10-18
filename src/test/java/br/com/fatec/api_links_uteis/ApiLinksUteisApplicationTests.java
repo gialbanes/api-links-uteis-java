@@ -8,7 +8,8 @@ class ApiLinksUteisApplicationTests {
 
 	@Test
 	void contextLoads() {
-		/* implementação futura */
+        /*  Este teste apenas verifica se o contexto do Spring Boot 
+        é carregado com sucesso, sem erros. */
 	}
 
 }

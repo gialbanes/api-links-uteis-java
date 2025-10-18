@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  * Endpoint disponível:
  * - GET /api/hello - Mensagem de boas-vindas
  */
-@RestController
-@RequestMapping("/api")
+@RestController // anotação que indica que esta classe é um controlador REST
+@RequestMapping("/api") // anotação que define o caminho base para os endpoints deste controlador
 public class HelloController {
 
-    @GetMapping("hello")
+    @GetMapping("hello") // anotação que mapeia requisições GET para o método hello()
     public String hello() {
         return "Olá Fatec";
     }

@@ -28,7 +28,7 @@ jobs:
     # Lista de passos (steps) do job
     steps:
     # Passo 1: Baixar o código do repositório
-    - name: Fazer checkout do código
+    - name: Fazer checkout do código 
       uses: actions/checkout@v4
 
     # Passo 2: Configurar Java 21
@@ -40,7 +40,7 @@ jobs:
 
     # Passo 3: Executar testes
     - name: Executar testes
-      run: mvn -B verify --file pom.xml
+      run: mvn -B verify --file pom.xml 
 
   cd:
     needs: ci
