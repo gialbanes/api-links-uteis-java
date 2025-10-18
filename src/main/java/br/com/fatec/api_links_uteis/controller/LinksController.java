@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController // anotação que indica que esta classe é um controlador REST
 @RequestMapping("/api/links") // anotação que define o caminho base para os endpoints deste controlador
 public class LinksController {
-    private static final String TITULO_GLOBAL = "Título Atualizado"; // Título usado nos testes
+    private static final String TITULO_GLOBAL = "titulo"; // Título usado nos testes
 
     // "Banco de dados" simulado
     // map é uma estrutura de dados que armazena pares chave-valor
