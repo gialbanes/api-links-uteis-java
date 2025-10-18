@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/links")
 public class LinksController {
+    private static final String TITULO_GLOBAL = "Links Úteis FATEC";
 
     // "Banco de dados" simulado
     private final Map<Integer, Map<String, String>> linksDB = new HashMap<>();
@@ -39,8 +40,8 @@ public class LinksController {
 
     public LinksController() {
         // Dados iniciais
-        linksDB.put(1, Map.of("id", "1", "titulo", "GitHub", "url", "https://github.com"));
-        linksDB.put(2, Map.of("id", "2", "titulo", "Stack Overflow", "url", "https://stackoverflow.com"));
+        linksDB.put(1, Map.of("id", "1", TITULO_GLOBAL, "GitHub", "url", "https://github.com"));
+        linksDB.put(2, Map.of("id", "2", TITULO_GLOBAL, "Stack Overflow", "url", "https://stackoverflow.com"));
         nextId = 3;
     }
 
@@ -61,7 +62,7 @@ public class LinksController {
     public Map<String, String> createLink(@RequestBody Map<String, String> data) {
         Map<String, String> novoLink = new HashMap<>();
         novoLink.put("id", String.valueOf(nextId));
-        novoLink.put("titulo", data.get("titulo"));
+        novoLink.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
         novoLink.put("url", data.get("url"));
 
         linksDB.put(nextId, novoLink);
@@ -75,7 +76,7 @@ public class LinksController {
     public Map<String, String> updateLink(@PathVariable int id, @RequestBody Map<String, String> data) {
         Map<String, String> linkAtualizado = new HashMap<>();
         linkAtualizado.put("id", String.valueOf(id));
-        linkAtualizado.put("titulo", data.get("titulo"));
+        linkAtualizado.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
         linkAtualizado.put("url", data.get("url"));
 
         linksDB.put(id, linkAtualizado);
@@ -88,7 +89,7 @@ public class LinksController {
         Map<String, String> linkExistente = linksDB.get(id);
         if (linkExistente != null) {
             Map<String, String> linkAtualizado = new HashMap<>(linkExistente);
-            if (data.get("titulo") != null) linkAtualizado.put("titulo", data.get("titulo"));
+            if (data.get(TITULO_GLOBAL) != null) linkAtualizado.put(TITULO_GLOBAL, data.get(TITULO_GLOBAL));
             if (data.get("url") != null) linkAtualizado.put("url", data.get("url"));
 
             linksDB.put(id, linkAtualizado);
