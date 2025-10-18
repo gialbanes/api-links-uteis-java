@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/links")
 public class LinksController {
-    private static final String TITULO_GLOBAL = "Links Úteis FATEC";
+    private static final String TITULO_GLOBAL = "Título Atualizado";
 
     // "Banco de dados" simulado
     private final Map<Integer, Map<String, String>> linksDB = new HashMap<>();
