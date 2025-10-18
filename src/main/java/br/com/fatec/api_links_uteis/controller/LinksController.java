@@ -5,103 +5,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controller REST para gerenciar links úteis da FATEC.
- *
- * Esta classe demonstra operações CRUD básicas usando uma HashMap
- * como armazenamento em memória para fins educacionais.
- *
- * Endpoints disponíveis:
- * - GET /api/links - Lista todos os links
- * - GET /api/links/{id} - Busca link por ID
- * - POST /api/links - Cria novo link
- * - PUT /api/links/{id} - Atualiza link completo
- * - PATCH /api/links/{id} - Atualiza parcialmente um link
- * - DELETE /api/links/{id} - Remove um link
- */
-@RestController
-@RequestMapping("/api/links")
+@RestController 
+@RequestMapping("/api/links") 
 public class LinksController {
 
-    // "Banco de dados" simulado
+    // Banco de dados simulado
+    // Estrutura de dados (Map) que simula um banco de dados em memória.
+    // A chave é um Integer (o ID do link), e o valor é um Map<String, String>
+    // que representa o próprio link (contendo "id", "titulo", "url").
+    // HashMap é usado para permitir acesso rápido aos links por ID. Funciona como um dicionário.
     private final Map<Integer, Map<String, String>> linksDB = new HashMap<>();
-    private int nextId = 1;
+    private int nextId = 1; // Variável para controle do próximo ID (não usada após a inicialização).
 
+    // Construtor da classe. É executado quando o Spring inicializa o Controller.
     public LinksController() {
-        // Dados iniciais
+        // Inicializa o banco de dados simulado com dois links fixos.
         linksDB.put(1, Map.of("id", "1", "titulo", "GitHub", "url", "https://github.com"));
         linksDB.put(2, Map.of("id", "2", "titulo", "Stack Overflow", "url", "https://stackoverflow.com"));
-        nextId = 3;
+        nextId = 3; // Atualiza o próximo ID (embora não haja métodos de adição implementados).
     }
 
-    // GET - Listar todos os links
-    @GetMapping
+    @GetMapping 
     public List<Map<String, String>> getLinks() {
+        // Retorna todos os valores (os objetos link) presentes no mapa linksDB
+        // como uma List. O Spring se encarrega de converter esta lista em JSON
+        // e enviá-la como resposta HTTP.
         return new ArrayList<>(linksDB.values());
     }
-
-    // GET - Buscar link por ID
-    @GetMapping("/{id}")
-    public Map<String, String> getLinkById(@PathVariable int id) {
-        return linksDB.get(id);
-    }
-
-    // POST - Criar novo link
-    @PostMapping
-    public Map<String, String> createLink(@RequestBody Map<String, String> data) {
-        Map<String, String> novoLink = new HashMap<>();
-        novoLink.put("id", String.valueOf(nextId));
-        novoLink.put("titulo", data.get("titulo"));
-        novoLink.put("url", data.get("url"));
-
-        linksDB.put(nextId, novoLink);
-        nextId++;
-
-        return novoLink;
-    }
-
-    // PUT - Atualizar link completo
-    @PutMapping("/{id}")
-    public Map<String, String> updateLink(@PathVariable int id, @RequestBody Map<String, String> data) {
-        Map<String, String> linkAtualizado = new HashMap<>();
-        linkAtualizado.put("id", String.valueOf(id));
-        linkAtualizado.put("titulo", data.get("titulo"));
-        linkAtualizado.put("url", data.get("url"));
-
-        linksDB.put(id, linkAtualizado);
-        return linkAtualizado;
-    }
-
-    // PATCH - Atualizar parcialmente
-    @PatchMapping("/{id}")
-    public Map<String, String> patchLink(@PathVariable int id, @RequestBody Map<String, String> data) {
-        Map<String, String> linkExistente = linksDB.get(id);
-        if (linkExistente != null) {
-            Map<String, String> linkAtualizado = new HashMap<>(linkExistente);
-            if (data.get("titulo") != null) linkAtualizado.put("titulo", data.get("titulo"));
-            if (data.get("url") != null) linkAtualizado.put("url", data.get("url"));
-
-            linksDB.put(id, linkAtualizado);
-            return linkAtualizado;
-        }
-        return null;
-    }
-
-    // DELETE - Remover link
-    @DeleteMapping("/{id}")
-    public String deleteLink(@PathVariable int id) {
-        linksDB.remove(id);
-        return "Link " + id + " removido";
-    }
-
 }
