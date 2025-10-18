@@ -8,6 +8,7 @@ class ApiLinksUteisApplicationTests {
 
 	@Test
 	void contextLoads() {
+		/* implementação futura */
 	}
 
 }
