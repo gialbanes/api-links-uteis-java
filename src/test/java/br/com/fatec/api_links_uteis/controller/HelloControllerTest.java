@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test;
  */
 class HelloControllerTest {
 
-    private final HelloController controller = new HelloController();
+    private final HelloController controller = new HelloController(); // Instancia o controller diretamente
 
-    @Test
-    void deveRetornarMensagemHello() {
-        // Teste simples
-        String resultado = controller.hello();
-        assertEquals("Olá Fatec", resultado);
+    @Test // anotação que indica que este método é um caso de teste
+    void deveRetornarMensagemHello() { 
+        // Testamos diretamente o retorno do método `hello()`
+        String resultado = controller.hello(); // Chama o método do controller
+        assertEquals("Olá Fatec", resultado); // Verifica se o retorno é o esperado
     }
 
 }
