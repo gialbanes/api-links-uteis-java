@@ -1,0 +1,47 @@
+name: Docker Build & Deploy 
+
+on:
+    push:
+        branches: ["main"]
+    workflow_dispatch:
+
+# cada job roda em uma VM diferente
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+        image: maven:3.9.9-eclipse-temurin-21
+    steps:
+        - name: Checkout código
+          uses: actions/checkout@v4 # action que faz o clone do código na VM (é um padrão que eu sempre uso - é do github)
+
+        - name: Executar testes no container
+          run: mvn -B verify 
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3 # é oficial do docker
+        with:
+          # essas variáveis de ambiente são criadas no repositório do github, em settings -> secrets and variables -> actions
+          username: ${{ secrets.DOCKER_USERNAME}} # variável de ambiente que pega o segredo do repositório
+          password: ${{ secrets.DOCKER_PASSWORD}} 
+
+      - name: Build e Push da imagem para o Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: . # contexto de build (pasta raiz do projeto)
+          push: true # pq com essa mesma action eu consigo só dar build e não dar o push se quiser
+          tags: ${{ secrets.DOCKER_USERNAME}}/api-links-uteis:latest # tag da imagem que vai ser criada e enviada para o docker hub
+
+    # avisar o render que a imagem subiu 
+      - name: Deploy no Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+
+
