@@ -1,4 +1,3 @@
-# não é a melhor prática pra produção, pois se ele cair não volta automaticamente
 # Docker Compose simples - Prometheus + Grafana para métricas
 services:
   # Aplicação Spring Boot
