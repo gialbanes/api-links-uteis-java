@@ -1,14 +1,11 @@
-# Docker Compose simples - Prometheus + Grafana para métricas
+version: '3.8'
 services:
-  # Aplicação Spring Boot
   app:
     build: .
     ports:
       - "8080:8080"
     networks:
       - monitoring
-
-  # Prometheus - Coleta métricas
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -21,8 +18,6 @@ services:
       - '--storage.tsdb.path=/prometheus'
     networks:
       - monitoring
-
-  # Grafana - Visualização
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -34,11 +29,9 @@ services:
       - grafana-data:/var/lib/grafana
     networks:
       - monitoring
-
 networks:
   monitoring:
     driver: bridge
-
 volumes:
   prometheus-data:
   grafana-data:
