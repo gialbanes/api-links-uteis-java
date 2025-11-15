@@ -2,6 +2,7 @@
 name: CI/CD Pipeline
 
 # Executa a cada Push e Pull request na main
+# sem esse bloco, o workflow não será executado 
 on:
   push:
     branches: ["teste"] # Executa sempre que houver um push na branch 'main'
@@ -45,6 +46,7 @@ jobs:
   cd:
     needs: ci
 
+    # validar se está vindo da main 
     if: github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-latest
